@@ -7,4 +7,6 @@ router.post("/login", controller.login);
 
 router.use("/check", authMiddleware);
 router.get("/check", controller.check);
+
+router.post("/refresh", controller.refresh);
 module.exports = router;

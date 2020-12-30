@@ -8,7 +8,7 @@ const User = new Schema({
   password: String,
   username: String,
   type: Number,
-  classRoomId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Classroom" }],
+  classId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
   parentId: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   childId: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   // 0 -> less admin
@@ -19,7 +19,7 @@ const User = new Schema({
   // 1 -> use
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, defulat: Date.now },
-  isAdmin: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false }
   // 0 -> not admin
   // 1 -> admin
 });
@@ -35,17 +35,21 @@ User.statics.create = function (userid, password, username, type) {
     userid,
     username,
     type,
-    password: encrypted,
+    password: encrypted
   });
   //create user
 
   return user.save();
 };
 
+User.statics.insertClass = function (_id, classId) {
+  return this.findOneAndUpdate({ _id }, { $push: { classId: classId } });
+};
+
 User.statics.findOneByUserid = function (userid) {
   //userid 값을 사용하여 유저를 찾음
   return this.findOne({
-    userid,
+    userid
   }).exec();
 };
 
